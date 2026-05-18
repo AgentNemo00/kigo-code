@@ -17,13 +17,13 @@ type ChangesConfig struct {
 	Changes 	[]string
 }
 
-func ListenForChanges(ctx context.Context, cfg *ChangesConfig, onChange func(change string, value any)) (error, func()) {
+func ListenForChanges(ctx context.Context, cfg *ChangesConfig, onChange func(change string, value any)) (func(), error) {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	sub, err := nats.SubscriberWithURL[order.Order](cfg.PubSubUrl)
 	if err != nil {
 		log.Ctx(ctx).Err(err)
-		return err, func ()  {}
+		return func ()  {}, err
 	}
 
 	subscription, err := sub.Subscribe(ctx, cfg.UUID, func(ctx context.Context, metadata ps.Metadata, data *order.Order)  {
@@ -47,9 +47,9 @@ func ListenForChanges(ctx context.Context, cfg *ChangesConfig, onChange func(cha
 	})
 	if err != nil {
 		log.Ctx(ctx).Err(err)
-		return err, func ()  {}
+		return func ()  {}, err
 	}
-	return nil, func ()  {
+	return func ()  {
 		subscription.Unsubscribe(ctx)
-	}
+	}, nil
 }

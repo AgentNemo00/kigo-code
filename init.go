@@ -102,7 +102,7 @@ func InitializeModule(ctx context.Context, start time.Time, cfg *InitConfig, onS
 				Name: cfg.Name,
 				Changes: cfg.Changes,
 				Heartbeat: cfg.Heartbeat,                   // configure hearbeat to be needed every two minutes
-				Duration: time.Now().Sub(start),			// duration needed to start up, should help to calculate hearbeat
+				Duration: time.Since(start),			// duration needed to start up, should help to calculate hearbeat
 			},
 		})		
 		if err != nil {
