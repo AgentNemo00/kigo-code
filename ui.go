@@ -1,4 +1,4 @@
-package contrib
+package kigocode
 
 import (
 	"context"
@@ -16,16 +16,7 @@ import (
 type UIConfig struct {
 	PubSubKiGoUI	string
 	PubSubUrl  		string
-	ID 				string
-}
-
-func (c *UIConfig) Default() {
-	if c.PubSubUrl == "" {
-		c.PubSubUrl = "nats://127.0.0.1:4222"
-	}
-	if c.PubSubKiGoUI == "" {
-		c.PubSubKiGoUI = "KiGoUI"
-	}
+	UUID 				string
 }
 
 func GetUIInformation(ctx context.Context, cfg *UIConfig) (*information.UIPayload, *information.ScreenPayload) {
@@ -46,7 +37,7 @@ func GetUIInformation(ctx context.Context, cfg *UIConfig) (*information.UIPayloa
 	errChan := make(chan error)
 	chanUI := make(chan information.UIPayload)
 	chanScreen := make(chan information.ScreenPayload)
-	subscription, err := sub.Subscribe(ctx, cfg.ID, func(ctx context.Context, metadata ps.Metadata, data *order.Order)  {
+	subscription, err := sub.Subscribe(ctx, cfg.UUID, func(ctx context.Context, metadata ps.Metadata, data *order.Order)  {
 		if metadata.Error != nil {
 			log.Ctx(ctx).Err(err)
 			return
@@ -92,7 +83,7 @@ func GetUIInformation(ctx context.Context, cfg *UIConfig) (*information.UIPayloa
 	go func ()  {
 		log.Ctx(ctx).Info("get ui information")
 		err = pub.Publish(ctx, cfg.PubSubKiGoUI, notification.Notification{
-			From: cfg.ID,
+			From: cfg.UUID,
 			To: cfg.PubSubKiGoUI,
 			Notification: inquiry.InquiryInformation,
 			Payload: inquiry.InquiryInformationPayload{
@@ -108,7 +99,7 @@ func GetUIInformation(ctx context.Context, cfg *UIConfig) (*information.UIPayloa
 	go func ()  {
 		log.Ctx(ctx).Info("get screen information")
 		err = pub.Publish(ctx, cfg.PubSubKiGoUI, notification.Notification{
-			From: cfg.ID,
+			From: cfg.UUID,
 			To: cfg.PubSubKiGoUI,
 			Notification: inquiry.InquiryInformation,
 			Payload: inquiry.InquiryInformationPayload{

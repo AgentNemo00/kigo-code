@@ -1,4 +1,4 @@
-package contrib
+package kigocode
 
 import (
 	"fmt"
@@ -12,7 +12,6 @@ import (
 	ps "github.com/AgentNemo00/sca-instruments/pubsub"
 	"github.com/AgentNemo00/sca-instruments/pubsub/nats"
 	"github.com/AgentNemo00/sca-instruments/security"
-	"github.com/AgentNemo00/sca-instruments/configuration"
 )
 
 type InitConfig struct {
@@ -23,30 +22,9 @@ type InitConfig struct {
 	Heartbeat 		time.Duration
 }
 
-func (c *InitConfig) Default() {
-	if c.PubSubUrl == "" {
-		c.PubSubUrl = "nats://127.0.0.1:4222"
-	}
-	if c.Name == "" {
-		c.Name = "unknown"
-	}
-	if c.PubSubKiGo == "" {
-		c.PubSubKiGo = "KiGo"
-	}
-	if c.Heartbeat == 0 {
-		c.Heartbeat = time.Hour * 24
-	}
-}
-
-
 func InitializeModule(ctx context.Context, start time.Time, cfg *InitConfig, onShutdown func(order.OrderShutdownPayload)) *order.OrderStartUpPayload {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	err := configuration.ByEnv(cfg)
-	if err != nil {
-		log.Ctx(ctx).Err(err)
-		return nil
-	}
 	// pubsub publisher
 	pub, err := nats.PublisherWithURL[notification.Notification](cfg.PubSubUrl)
 	if err != nil {

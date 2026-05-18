@@ -1,4 +1,4 @@
-package contrib
+package kigocode
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 type RenderConfig struct {
 	PubSubKiGoUI	string
 	PubSubUrl  		string
-	ID 				string
+	UUID 				string
 	Channel 		string
 	Format 			string
 	FPS 			int
@@ -42,7 +42,7 @@ func GetChannel(ctx context.Context, cfg *RenderConfig) *order.OrderRenderPayloa
 	}
 
 	chanRenderPayload := make(chan order.OrderRenderPayload)
-	subscription, err := sub.Subscribe(ctx, cfg.ID, func(ctx context.Context, metadata ps.Metadata, data *order.Order)  {
+	subscription, err := sub.Subscribe(ctx, cfg.UUID, func(ctx context.Context, metadata ps.Metadata, data *order.Order)  {
 		if metadata.Error != nil {
 			log.Ctx(ctx).Err(err)
 			return
@@ -67,7 +67,7 @@ func GetChannel(ctx context.Context, cfg *RenderConfig) *order.OrderRenderPayloa
 
 	go func ()  {
 		err := pub.Publish(ctx, cfg.PubSubKiGoUI, notification.Notification{
-			From: cfg.ID,
+			From: cfg.UUID,
 			To: cfg.PubSubKiGoUI,
 			Notification: inquiry.InquiryRender,
 			Payload: inquiry.InquiryRenderPayload{
