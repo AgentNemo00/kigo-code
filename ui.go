@@ -30,7 +30,7 @@ func (c *UIConfig) Default() {
 
 func GetUIInformation(ctx context.Context, cfg *UIConfig) (*information.UIPayload, *information.ScreenPayload) {
 	ctx, cancel := context.WithCancel(ctx)
-	
+	defer cancel()
 	pub, err := nats.PublisherWithURL[notification.Notification](cfg.PubSubUrl)
 	if err != nil {
 		log.Ctx(ctx).Err(err)

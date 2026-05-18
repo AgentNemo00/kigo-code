@@ -27,8 +27,8 @@ type RenderConfig struct {
 }
 
 func GetChannel(ctx context.Context, cfg *RenderConfig) *order.OrderRenderPayload {
-	ctx, _ = context.WithCancel(ctx)
-
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 	sub, err := nats.SubscriberWithURL[order.Order](cfg.PubSubUrl)
 	if err != nil {
 		log.Ctx(ctx).Err(err)

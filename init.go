@@ -41,6 +41,7 @@ func (c *InitConfig) Default() {
 
 func InitializeModule(ctx context.Context, start time.Time, cfg *InitConfig, onShutdown func(order.OrderShutdownPayload)) *order.OrderStartUpPayload {
 	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 	err := configuration.ByEnv(cfg)
 	if err != nil {
 		log.Ctx(ctx).Err(err)
