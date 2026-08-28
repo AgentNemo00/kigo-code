@@ -53,3 +53,50 @@ func ListenForChanges(ctx context.Context, cfg *ChangesConfig, onChange func(cha
 		subscription.Unsubscribe(ctx)
 	}, nil
 }
+
+type ChangeConfig struct {
+	NameTo 		string
+	Name 		string
+	UUID 		string
+	PubSubUrl  	string
+	PubSubKiGo	string
+	Change 		string
+	Value 		any
+}
+
+func SendChange(ctx context.Context, cfg *ChangeConfig) bool {
+	module := GetModule(ctx, &ModuleConfig{
+		NameTo: cfg.NameTo,
+		Name: cfg.Name,
+		PubSubUrl: cfg.PubSubUrl,
+		PubSubKiGo: cfg.PubSubKiGo,
+	})
+	if module == nil {
+		return false
+	}
+	if !slices.Contains(module.Changes, cfg.Change) {
+		log.Ctx(ctx).Error("Change %s is not configured.", cfg.Change)
+		return false
+	}
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	pub, err := nats.PublisherWithURL[order.Order](cfg.PubSubUrl)
+	if err != nil {
+		log.Ctx(ctx).Err(err)
+		return false
+	}
+	err = pub.Publish(ctx, module.ID, order.Order{
+		From: cfg.UUID,
+		To: module.ID,
+		Order: order.OrderChange,
+		Payload: order.OrderChangePayload{
+			Type: cfg.Change,
+			Payload: cfg.Value,
+		},
+	})
+	if err != nil {
+		log.Ctx(ctx).Err(err)
+		return false
+	}
+	return true
+}
