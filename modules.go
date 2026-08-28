@@ -7,6 +7,7 @@ import (
 	"github.com/AgentNemo00/kigo-core/inquiry"
 	"github.com/AgentNemo00/kigo-core/notification"
 	"github.com/AgentNemo00/kigo-core/order"
+	"github.com/AgentNemo00/kigo-core/util"
 	"github.com/AgentNemo00/sca-instruments/log"
 	"github.com/AgentNemo00/sca-instruments/pubsub"
 	"github.com/AgentNemo00/sca-instruments/pubsub/nats"
