@@ -75,7 +75,7 @@ func SendChange(ctx context.Context, cfg *ChangeConfig) bool {
 		return false
 	}
 	if !slices.Contains(module.Changes, cfg.Change) {
-		log.Ctx(ctx).Error("Change %s is not configured.", cfg.Change)
+		log.Ctx(ctx).Error("Change %s is not configured for %s for module %s", cfg.Change, module.Changes, cfg.Name)
 		return false
 	}
 	ctx, cancel := context.WithCancel(ctx)
