@@ -1,5 +1,7 @@
 github.com/AgentNemo00/kigo-core v0.5.21 h1:Q/b5/kKGYWlFJoDlukSmde5rdwTBCjU7J0yRKMyAtbo=
 github.com/AgentNemo00/kigo-core v0.5.21/go.mod h1:yZE4YxMNoxdUD71D8Tvj7CYC0ToiYRYMEuIHFzuxlTI=
+github.com/AgentNemo00/kigo-core v0.5.29 h1:+0FngHO3JYaG9J9DSEco29Cv+gKKeDV+QNoATlwA5wI=
+github.com/AgentNemo00/kigo-core v0.5.29/go.mod h1:yZE4YxMNoxdUD71D8Tvj7CYC0ToiYRYMEuIHFzuxlTI=
 github.com/AgentNemo00/sca-instruments v0.6.3 h1:Y940sSGTo2YagzpfGh4rQDc9hTLnhx1C1Mb8VWfVges=
 github.com/AgentNemo00/sca-instruments v0.6.3/go.mod h1:r0Z8UXfwaBOr67xO1tmfKqw5NVdkZJrnirTtwojTXPQ=
 github.com/coreos/go-systemd/v22 v22.5.0/go.mod h1:Y58oyj3AT4RCenI/lSvhwexgC+NSVTIJ3seZv2GcEnc=

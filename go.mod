@@ -3,7 +3,7 @@ module github.com/AgentNemo00/kigo-code
 go 1.26.0
 
 require (
-	github.com/AgentNemo00/kigo-core v0.5.21
+	github.com/AgentNemo00/kigo-core v0.5.29
 	github.com/AgentNemo00/sca-instruments v0.6.3
 )
 
