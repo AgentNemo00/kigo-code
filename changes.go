@@ -74,7 +74,14 @@ func SendChange(ctx context.Context, cfg *ChangeConfig) bool {
 	if module == nil {
 		return false
 	}
-	if !slices.Contains(module.Changes, cfg.Change) {
+	found := false
+	for _, change := range module.Changes {
+		if change.Value == cfg.Change {
+			found = true
+			break
+		}
+	}
+	if !found {
 		log.Ctx(ctx).Error("Change %s is not configured for %s for module %s", cfg.Change, module.Changes, cfg.Name)
 		return false
 	}
